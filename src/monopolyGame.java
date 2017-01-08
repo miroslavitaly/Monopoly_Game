@@ -5,16 +5,17 @@ import java.util.Scanner;
 public class monopolyGame {
 
 	public static void main(String[] args) {
-		// Колко играча ще играят
+		
+		//How many players
 		Scanner sc1 = new Scanner(System.in);
-		System.out.println("Колко играча ще играят? ");
+		System.out.println("How many players");
 		int howManyPlayers = sc1.nextInt(4);
 
-		// Въвеждане на имената на играчите
+		// Enter player name
 		String[] playerName = new String[howManyPlayers];
 		for (int i = 0; i <= playerName.length - 1; i++) {
 			Scanner sc2 = new Scanner(System.in);
-			System.out.println("Въведи името на играч " + i + " :");
+			System.out.println("Enter player name" + i + " :");
 			String name = sc2.next();
 			playerName[i] = name;
 		}
@@ -22,26 +23,26 @@ public class monopolyGame {
 		for (int i = 0; i < player.length; i++) {
 			player[i] = i;
 		}
-		// запазва сметката на играча
+		//Player account
 		int[] sum = new int[howManyPlayers];
 		for (int i = 0; i < sum.length; i++) {
 			sum[i] = 1000;
 		}
-		// запазва позицията на играча
+		//Position Player
 		int[] positionPlayer = new int[howManyPlayers];
-		// запазва собствеността на играча
+		//Property player
 		int[] property = new int[5];
 		for (int i = 0; i < property.length; i++) {
 			property[i] = 9;
 		}
-		// имената на позициите
+		//Position name
 		String[] positionName = { " Стартово поле ", " Съкровище ", " Ботевградско шосе: 50$ ",
 				" Цариградско шосе: 60$ ", " Данък печалба: 200$ " };
 		int [] positionPrise = {10, 10, 50, 60, 200};
 
 		boolean runGame = true;
 
-		// Старт на ирата
+		//Start game
 		while (runGame) {
 			for (int j = 0; j <= player.length - 1; j++) {
 
