@@ -2,6 +2,8 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.print.DocFlavor.INPUT_STREAM;
+
 public class monopolyGame {
 
 	public static void main(String[] args) {
@@ -21,24 +23,25 @@ public class monopolyGame {
 			player[i] = i;
 		}
 		int[] sum = new int[howManyPlayers];
-			for (int i = 0; i < sum.length; i++) {
-				sum[i] = 1000;
-			}
+		for (int i = 0; i < sum.length; i++) {
+			sum[i] = 1000;
+		}
 		int[] positionPlayer = new int[howManyPlayers];
 		int[] property = new int[40];
-			for (int i = 0; i < property.length; i++) {
-				property[i] = getValue(i);
-			}
+		for (int i = 0; i < property.length; i++) {
+			property[i] = getValue(i);
+		}
 		String[] positionName = new String[40];
 		for (int i = 0; i < positionName.length; i++) {
 			positionName[i] = getName(i);
 		}
 		int[] positionPrise = { 0, 0, 50, 60, 200, 150, 0, 100, 100, 120, 0, 150, 150, 180, 150, 150, 0, 200, 200, 220,
-				               0, 240, 250, 250, 0, 150, 150, 260, 260, 280, 0, 300, 300, 320, 0, 150, 0, 360, 400, 300 };
+				0, 240, 250, 250, 0, 150, 150, 260, 260, 280, 0, 300, 300, 320, 0, 150, 0, 360, 400, 300 };
 		boolean runGame = true;
 		int playersInGame = howManyPlayers;
 		int winner = 0;
-		
+
+		// Run game
 		while (runGame) {
 			for (int j = 0; j <= player.length - 1; j++) {
 				if (sum[j] <= 0) {
@@ -46,12 +49,21 @@ public class monopolyGame {
 				}
 				System.out.println(playerName[j] + " , its your turn! Press enter!");
 				Scanner sc3 = new Scanner(System.in);
-				char run = sc3.next(".").charAt(0);
+				String readEnter = sc3.nextLine();
+				if (readEnter != null) {
+					if (readEnter.equals("")) {
 
+					} else {
+						System.out.println("Try agen. Press enter!");
+						j -= 1;
+						continue;
+					}
+				}
 				Random rand = new Random();
-				int dice = rand.nextInt(12)+1;
+				int dice = rand.nextInt(12) + 1;
 				System.out.println("The sum of the dice: " + dice);
 
+				// Position player
 				System.out.println("Previous   position:" + positionName[positionPlayer[j]]);
 				sum[j] += sumPassStart(positionPlayer[j], dice);
 				positionPlayer[j] = passStartDice(positionPlayer[j], dice);
@@ -80,39 +92,40 @@ public class monopolyGame {
 						System.out.println("You do not have enough money to buy!");
 						continue;
 					}
-				}else if(property[positionPlayer[j]] == 7){
-					System.out.println(
-							"Position is free to use!");
-				}else if(property[positionPlayer[j]] == 8){
+				} else if (property[positionPlayer[j]] == 7) {
+					System.out.println("Position is free to use!");
+				} else if (property[positionPlayer[j]] == 8) {
 					System.out.println("GOLD! You get bonus 200$ ");
 					sum[j] += 200;
-				}else if(property[positionPlayer[j]] == 9){
+				} else if (property[positionPlayer[j]] == 9) {
 					System.out.println("You must pay tax 200$ ");
 					sum[j] -= 200;
-				}else if(property[positionPlayer[j]] == 10){
+				} else if (property[positionPlayer[j]] == 10) {
 					System.out.println("You are on spetial position! ");
 					Random rand1 = new Random();
-					int chance = rand1.nextInt(10)+1;
-					if(chance <= 5){
+					int chance = rand1.nextInt(10) + 1;
+					if (chance <= 5) {
 						positionPlayer[j] += specialCard1(positionPlayer[j], chance);
-					}else{
+					} else {
 						sum[j] += specialCard2(sum[j], chance);
 					}
 					continue;
-				}else if(property[positionPlayer[j]] == 11){
+				} else if (property[positionPlayer[j]] == 11) {
 					System.out.println("You are in JAIL! ");
 					continue;
 				}
-				 
+
 				System.out.println("In your account has: " + sum[j] + " dollars!");
-				if((sum[player[j]] > 0)&&(property[positionPlayer[j]] <= 4)&&(property[positionPlayer[j]] != player[j])){
+				if ((sum[player[j]] > 0) && (property[positionPlayer[j]] <= 4)
+						&& (property[positionPlayer[j]] != player[j])) {
 					System.out.println("Position is property to: " + playerName[property[positionPlayer[j]]]);
 					sum[j] = payRent(property[positionPlayer[j]], player[j], sum[j], positionPrise[positionPlayer[j]],
 							playerName[property[positionPlayer[j]]]);
 					sum[property[positionPlayer[j]]] = getMoney(property[positionPlayer[j]], player[j],
 							sum[property[positionPlayer[j]]], positionPrise[positionPlayer[j]]);
 				}
-								
+
+				// Check for winner (winner is player with maxSum)
 				winner = isWinner(sum[j], player[j]);
 				System.out.println("Accounts of players " + Arrays.toString(sum));
 				System.out.println("------------------------------------------------");
@@ -125,7 +138,6 @@ public class monopolyGame {
 							}
 						}
 						for (int k1 = 0; k1 < property.length; k1++) {
-
 							if (property[k1] == player[i]) {
 								System.out.println(playerName[i] + " ,do you want to sell yuor property? "
 										+ " y - for YES ;  n - for NO");
@@ -133,7 +145,6 @@ public class monopolyGame {
 								char sellOrNo = sc5.next(".").charAt(0);
 								switch (sellOrNo) {
 								case 'y':
-
 									Scanner sc6 = new Scanner(System.in);
 									System.out.println("Select position number to sell:");
 									int whatToSell = sc6.nextInt();
@@ -159,23 +170,26 @@ public class monopolyGame {
 					}
 
 				}
-
 				System.out.println("Position property " + Arrays.toString(property));
 				System.out.println("Accounts of players " + Arrays.toString(sum));
+
+				// Eliminate player with sum = 0
 				if (sum[j] <= 0) {
 					System.out.println(playerName[player[j]] + "! Game over for you!");
 					playersInGame--;
 				}
-
 				System.out.println("------------------------------------------------");
 			}
+
+			// Check for winner if player <= 1
 			if (playersInGame <= 1) {
 				runGame = false;
 				System.out.println("Game over! " + playerName[player[winner]] + ", you win!");
 			}
 		}
 	}
-	public static int sumPassStart(int positionPlayer, int dice ) {
+
+	public static int sumPassStart(int positionPlayer, int dice) {
 		int sumJ = 0;
 		positionPlayer += dice;
 		if (positionPlayer > 39) {
@@ -184,6 +198,7 @@ public class monopolyGame {
 		}
 		return sumJ;
 	}
+
 	public static int passStartDice(int positionPlayer, int dice) {
 		positionPlayer = positionPlayer + dice;
 		if (positionPlayer > 39) {
@@ -196,7 +211,7 @@ public class monopolyGame {
 
 	public static int getValue(int i) {
 		int property = 0;
-		if ((i == 0) || (i == 10)||(i==20)) {
+		if ((i == 0) || (i == 10) || (i == 20)) {
 			property = 7;// free position
 		} else if ((i == 1) || (i == 16) || (i == 34)) {
 			property = 8;// gold position
@@ -364,48 +379,64 @@ public class monopolyGame {
 		}
 		return sumPropertyPositionPlayerJ;
 	}
-	public static int specialCard1(int positionPlayerJ,int chance){
-		switch(chance){
-			case 1:System.out.println(" Go to /23/ Illinois 250$! ");
+
+	public static int specialCard1(int positionPlayerJ, int chance) {
+		switch (chance) {
+		case 1:
+			System.out.println(" Go to /23/ Illinois 250$! ");
 			positionPlayerJ = 23;
-				break;
-			case 2:System.out.println(" Go to /33/ Pennsylvania 320$! ");
+			break;
+		case 2:
+			System.out.println(" Go to /33/ Pennsylvania 320$! ");
 			positionPlayerJ = 33;
-				break;
-			case 3:System.out.println(" Go to START! ");
+			break;
+		case 3:
+			System.out.println(" Go to START! ");
 			positionPlayerJ = 0;
-				break;
-			case 4:System.out.println(" Go forward 5 position ! ");
+			break;
+		case 4:
+			System.out.println(" Go forward 5 position ! ");
 			positionPlayerJ += 5;
-				break;
-			case 5:System.out.println(" Go forward 10 position ! ");
-			positionPlayerJ += 10;;
-				break;
-				default: break;
+			break;
+		case 5:
+			System.out.println(" Go forward 10 position ! ");
+			positionPlayerJ += 10;
+			;
+			break;
+		default:
+			break;
 		}
 		return positionPlayerJ;
 	}
-	public static int specialCard2(int sumJ,int chance){
-		switch(chance){
-				case 6:System.out.println(" You have to pay 200$ for dentist! ");
-				sumJ = -200;
-					break;
-				case 7:System.out.println(" You have to pay 300$ for your car!");
-				sumJ = -300;
-					break;
-				case 8:System.out.println(" You go to JAIL! Have to pay 400$");
-				sumJ = -400;
-					break;
-				case 9:System.out.println(" You have birthday! Get 200$ ");
-				sumJ = 200;
-					break;
-				case 10:System.out.println(" You win 400$ from this cart ");
-				sumJ = 400;
-					break;
-				default: break;
-			}
+
+	public static int specialCard2(int sumJ, int chance) {
+		switch (chance) {
+		case 6:
+			System.out.println(" You have to pay 200$ for dentist! ");
+			sumJ = -200;
+			break;
+		case 7:
+			System.out.println(" You have to pay 300$ for your car!");
+			sumJ = -300;
+			break;
+		case 8:
+			System.out.println(" You go to JAIL! Have to pay 400$");
+			sumJ = -400;
+			break;
+		case 9:
+			System.out.println(" You have birthday! Get 200$ ");
+			sumJ = 200;
+			break;
+		case 10:
+			System.out.println(" You win 400$ from this cart ");
+			sumJ = 400;
+			break;
+		default:
+			break;
+		}
 		return sumJ;
 	}
+
 	public static int isWinner(int sumJ, int playerJ) {
 		int previousMaxAmount = 0;
 		int playerMaxSum = 0;
